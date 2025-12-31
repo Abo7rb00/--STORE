@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>متجر 𝑻𝒐𝒐𝒌𝒂𝒗𝒊𝒍𝒍𝒘 𝑪𝒊𝒕𝒚 - الأسود والذهبي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body{
+  margin:0;
+  font-family:'Cairo',sans-serif;
+  background:#000;
+  color:#FFD700;
+}
+/* Navbar */
+nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:40px;
+  padding:20px 0;
+  z-index:1000;
+  font-size:18px;
+  font-weight:bold;
+}
+nav a{
+  color:#FFD700;
+  text-decoration:none;
+  position:relative;
+}
+nav a:hover{color:#FFC700;}
+/* Cart Counter */
+#cart-count{
+  position:absolute;
+  top:-10px;
+  right:-15px;
+  background:red;
+  color:white;
+  font-size:14px;
+  padding:3px 7px;
+  border-radius:50%;
+  display:none;
+}
+/* Header */
+header{
+  padding:100px 20px 40px;
+  text-align:center;
+}
+header h1{color:#FFD700;font-size:36px;}
+/* Products Grid */
+.products{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+}
+.product{
+  background:#111;
+  border-radius:16px;
+  padding:15px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(255,215,0,0.3);
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product:hover{
+  transform:translateY(-5px);
+  box-shadow:0 15px 35px rgba(255,215,0,0.7);
+}
+.product img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:12px;
+}
+.product h3{
+  color:#FFD700;
+  margin:10px 0 5px;
+  font-size:20px;
+}
+.product p{
+  color:#FFD700;
+  font-size:18px;
+  margin:5px 0;
+}
+.product button{
+  margin-top:10px;
+  padding:12px 20px;
+  border:none;
+  border-radius:12px;
+  background:#FFD700;
+  color:#000;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:background 0.3s ease, transform 0.2s ease;
+}
+.product button:hover{
+  background:#FFC700;
+  transform:scale(1.05);
+}
+</style>
+</head>
+<body>
+<script>
+if(localStorage.getItem("loggedIn") !== "true"){
+  window.location.href = "login.html";
+}
+</script>
+<nav>
+  <a href="index.html">الرئيسية</a>
+  <a href="store.html">المتجر</a>
+  <a href="cart.html">
+    🛒
+    <span id="cart-count">0</span>
+  </a>
+  <a href="https://discord.gg/kBJqQznCbV" target="_blank">Discord</a>
+</nav>
+<header>
+  <h1>🛍️ متجر 𝑻𝒐𝒐𝒌𝒂𝒗𝒊𝒍𝒍𝒘 𝑪𝒊𝒕𝒚 - </h1>
+</header>
+<section class="products">
+  <div class="product">
+    <img src="https://via.placeholder.com/300x180.png?text=منتج+1" alt="منتج 1">
+    <h3>منتج 1</h3>
+    <p>$10</p>
+    <button onclick="addToCart('منتج 1',10)">شراء</button>
+  </div>
+  <div class="product">
+    <img src="https://via.placeholder.com/300x180.png?text=منتج+2" alt="منتج 2">
+    <h3>منتج 2</h3>
+    <p>$15</p>
+    <button onclick="addToCart('منتج 2',15)">شراء</button>
+  </div>
+  <div class="product">
+    <img src="https://via.placeholder.com/300x180.png?text=منتج+3" alt="منتج 3">
+    <h3>منتج 3</h3>
+    <p>$20</p>
+    <button onclick="addToCart('منتج 3',20)">شراء</button>
+  </div>
+</section>
+<script>
+function updateCartCount(){
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let badge = document.getElementById("cart-count");
+  if(cart.length > 0){
+    badge.style.display = "inline-block";
+    badge.textContent = cart.length;
+  }else{
+    badge.style.display = "none";
+  }
+}
+function addToCart(name, price){
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push({name, price});
+  localStorage.setItem("cart",JSON.stringify(cart));
+  updateCartCount();
+  alert("تمت إضافة المنتج للسلة ✅");
+}
+updateCartCount();
+</script>
+</body>
+</html>

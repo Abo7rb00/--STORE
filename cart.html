@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سلة المشتريات - الأسود والذهبي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body{
+  font-family:'Cairo',sans-serif;
+  background:#000;
+  color:#FFD700;
+  margin:0;
+}
+/* Header */
+header{
+  text-align:center;
+  padding:80px 20px 40px;
+}
+header h1{color:#FFD700;font-size:36px;}
+
+/* Cart Items */
+.cart{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+
+.cart-item{
+  background:#111;
+  border-radius:16px;
+  padding:15px;
+  margin-bottom:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 10px 25px rgba(255,215,0,0.3);
+  animation:fadeIn .4s ease;
+}
+
+.cart-item h3{
+  margin:0;color:#FFD700;font-size:20px;
+}
+.cart-item p{
+  margin:5px 0;color:#FFD700;font-size:18px;
+}
+
+.remove-btn{
+  background:#FFD700;
+  border:none;
+  color:#000;
+  padding:10px 16px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+  transition:background 0.3s ease, transform 0.2s ease;
+}
+.remove-btn:hover{
+  background:#FFC700;
+  transform:scale(1.05);
+}
+
+/* Total */
+.total{
+  text-align:center;
+  font-size:22px;
+  margin-top:20px;
+  color:#FFD700;
+}
+
+/* Buttons */
+.back-btn{
+  display:block;
+  margin:30px auto;
+  padding:14px 32px;
+  background:#FFD700;
+  border:none;
+  color:#000;
+  font-weight:bold;
+  border-radius:14px;
+  cursor:pointer;
+  transition:background 0.3s ease, transform 0.2s ease;
+}
+.back-btn:hover{
+  background:#FFC700;
+  transform:scale(1.05);
+}
+
+/* Empty Cart */
+.empty{
+  text-align:center;
+  margin-top:40px;
+  opacity:.7;
+}
+
+/* Animations */
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeOut{
+  to{opacity:0;transform:translateX(-20px)}
+}
+</style>
+</head>
+<body>
+
+<script>
+// حماية السلة: التأكد من تسجيل الدخول
+if(localStorage.getItem("loggedIn") !== "true"){
+  window.location.href = "login.html";
+}
+</script>
+
+<header>
+  <h1>🛒 سلة المشتريات</h1>
+</header>
+
+<div class="cart" id="cart"></div>
+<div class="total" id="total"></div>
+
+<a href="store.html">
+  <button class="back-btn">⬅ العودة للمتجر</button>
+</a>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const cartDiv = document.getElementById("cart");
+const totalDiv = document.getElementById("total");
+
+function renderCart(){
+  cartDiv.innerHTML = "";
+  let total = 0;
+
+  if(cart.length === 0){
+    cartDiv.innerHTML = '<p class="empty">السلة فارغة</p>';
+    totalDiv.textContent = "";
+    return;
+  }
+
+  cart.forEach((item,index)=>{
+    total += item.price;
+
+    let div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = `
+      <div>
+        <h3>${item.name}</h3>
+        <p>$${item.price}</p>
+      </div>
+      <button class="remove-btn" onclick="removeItem(${index})">حذف</button>
+    `;
+    cartDiv.appendChild(div);
+  });
+
+  totalDiv.textContent = `الإجمالي: $${total}`;
+}
+
+function removeItem(index){
+  let item = document.querySelectorAll(".cart-item")[index];
+  item.style.animation = "fadeOut .3s forwards";
+
+  setTimeout(()=>{
+    cart.splice(index,1);
+    localStorage.setItem("cart",JSON.stringify(cart));
+    renderCart();
+  },300);
+}
+
+renderCart();
+</script>
+
+</body>
+</html>
